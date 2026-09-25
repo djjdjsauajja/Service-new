@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service NSW</title>
+    <style>
+        :root {
+            --primary: #002b49;
+            --accent: #0072ce;
+            --bg: #f4f6f9;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 {
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        /* Card Styling */
+        .id-card {
+            background: linear-gradient(135deg, #002b49, #003e6b);
+            color: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .card-header span {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #79b8ff;
+            font-weight: bold;
+        }
+        .card-body {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .photo-box {
+            width: 90px;
+            height: 115px;
+            background-color: #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.4);
+            flex-shrink: 0;
+        }
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .info-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow: hidden;
+        }
+        .label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: #9abedb;
+            letter-spacing: 0.5px;
+        }
+        .value {
+            font-size: 0.95rem;
+            font-weight: bold;
+            word-break: break-word;
+        }
+        .status-badge {
+            margin-top: 15px;
+            background-color: rgba(46, 204, 113, 0.2);
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
+            text-align: center;
+            padding: 6px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        /* Controls Form Styling */
+        .controls {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .controls label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #555;
+        }
+        .controls input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h2>Mobile ID Preview</h2>
+
+    <!-- The Virtual Card Display -->
+    <div class="id-card" id="cardElement">
+        <div class="card-header">
+            <span>New South Wales • Demo ID</span>
+            <span>Verified</span>
+        </div>
+        <div class="card-body">
+            <div class="photo-box">
+                <img id="displayPhoto" src="https://via.placeholder.com/90x115?text=Photo" alt="User Photo">
+            </div>
+            <div class="info-group">
+                <div>
+                    <div class="label">Full Name</div>
+                    <div class="value" id="displayName">John Citizen</div>
+                </div>
+                <div>
+                    <div class="label">Licence Number</div>
+                    <div class="value" id="displayLicence">1234 5678</div>
+                </div>
+            </div>
+        </div>
+        <div class="status-badge">ACTIVE LICENCE (DEMO)</div>
+    </div>
+
+    <!-- Controls to Change Fields -->
+    <div class="controls">
+        <h3>Edit Card Details</h3>
+        <div>
+            <label for="inputName">Change Name:</label>
+            <input type="text" id="inputName" value="John Citizen" placeholder="Enter name...">
+        </div>
+        <div>
+            <label for="inputLicence">Change Licence No:</label>
+            <input type="text" id="inputLicence" value="1234 5678" placeholder="Enter number...">
+        </div>
+        <div>
+            <label for="inputPhoto">Upload Photo:</label>
+            <input type="file" id="inputPhoto" accept="image/*">
+        </div>
+    </div>
+</div>
+
+<script>
+    // Grab elements
+    const inputName = document.getElementById('inputName');
+    const inputLicence = document.getElementById('inputLicence');
+    const inputPhoto = document.getElementById('inputPhoto');
+
+    const displayName = document.getElementById('displayName');
+    const displayLicence = document.getElementById('displayLicence');
+    const displayPhoto = document.getElementById('displayPhoto');
+
+    // Update name dynamically
+    inputName.addEventListener('input', (e) => {
+        displayName.textContent = e.target.value || "—";
+    });
+
+    // Update licence dynamically
+    inputLicence.addEventListener('input', (e) => {
+        displayLicence.textContent = e.target.value || "—";
+    });
+
+    // Handle photo upload dynamically
+    inputPhoto.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                displayPhoto.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+</body>
+</html>
